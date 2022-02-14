@@ -74,9 +74,6 @@ class Extension {
     }
 
     disable() {
-        this._indicator.destroy();
-        this._indicator = null;
-
         global.display.disconnect(this._handler);
     }
 }
