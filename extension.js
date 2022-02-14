@@ -58,6 +58,9 @@ class Extension {
         
         this._handler = global.display.connect('notify::focus-window', () => {
             let meta_window = global.display.focus_window;
+
+            if (!meta_window)
+                return;
                         
             const pid = meta_window.get_pid()
             
