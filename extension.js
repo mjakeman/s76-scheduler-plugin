@@ -68,7 +68,6 @@ class Extension {
                 if (foreground === pid) return
                 foreground = pid;
 
-                log(`Setting priority for ${meta_window.get_title()}`);
                 SchedProxy.SetForegroundProcessRemote(pid, (result, error) => {
                     if (error) {
                         // On error, notify the user and write to stderr
