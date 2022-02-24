@@ -54,12 +54,14 @@ class Extension {
     enable() {        
         log("Initialising system76-scheduler integration");
 
+        // Update foreground process whenever the window focus is changed
         this._handler = global.display.connect('notify::focus-window', () => {
             let meta_window = global.display.focus_window;
 
             if (!meta_window)
                 return;
-                        
+
+            // Prioritise process of currently focused window
             const pid = meta_window.get_pid();
             
             if (pid) {
@@ -69,6 +71,7 @@ class Extension {
                 log(`Setting priority for ${meta_window.get_title()}`);
                 SchedProxy.SetForegroundProcessRemote(pid, (result, error) => {
                     if (error) {
+                        // On error, notify the user and write to stderr
                         GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
                             Main.notifyError("Failed to communicate with system76-scheduler service.");
                             logError(error);
