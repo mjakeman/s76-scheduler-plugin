@@ -3,6 +3,8 @@
   "description": "Integrates with System76 Scheduler to prioritise foreground processes.\nNote: system76-scheduler must be installed separately!",
   "uuid": "s76-scheduler@mattjakeman.com",
   "shell-version": [
-    "41"
+    "40",
+    "41",
+    "42"
   ]
 }
