@@ -21,12 +21,10 @@
 
 const GETTEXT_DOMAIN = 's76-scheduler-plugin';
 
-const { GObject, St } = imports.gi;
+const { GObject, Gio, GLib, St } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
-
-const Gio = imports.gi.Gio;
 
 const SchedulerInterface = '<node>\
 <interface name="com.system76.Scheduler"> \
@@ -55,23 +53,29 @@ class Extension {
 
     enable() {        
         log("Initialising system76-scheduler integration");
-        
+
         this._handler = global.display.connect('notify::focus-window', () => {
             let meta_window = global.display.focus_window;
 
             if (!meta_window)
                 return;
                         
-            const pid = meta_window.get_pid()
+            const pid = meta_window.get_pid();
             
             if (pid) {
                 if (foreground === pid) return
-                foreground = pid
+                foreground = pid;
 
-                try {
-                    log(`Setting priority for ${meta_window.get_title()}`)
-                    SchedProxy.SetForegroundProcessRemote(pid)
-                } catch (_) {}
+                log(`Setting priority for ${meta_window.get_title()}`);
+                SchedProxy.SetForegroundProcessRemote(pid, (result, error) => {
+                    if (error) {
+                        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                            Main.notifyError("Failed to communicate with system76-scheduler service.");
+                            logError(error);
+                            return false;
+                        });
+                    }
+                });
             }
         });
     }
