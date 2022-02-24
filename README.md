@@ -17,3 +17,13 @@ for Fedora and derivatives [here](https://copr.fedorainfracloud.org/coprs/mjakem
 Ensure that the `com.system76.Scheduler` service is enabled.
 
 Enable `s76-scheduler-plugin` from your extension manager app.
+
+## Disclaimer
+This extension is not affiliated with nor supported by System76. Please
+report any issues here first, before engaging with the system76-scheduler
+issue tracker.
+
+The canonical repository for `s76-scheduler-plugin` is:
+```
+https://github.com/mjakeman/s76-scheduler-plugin/
+```
