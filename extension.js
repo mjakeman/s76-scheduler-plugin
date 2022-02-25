@@ -43,7 +43,7 @@ const SchedProxy = new SchedulerProxy(
 )
 
 let foreground = 0;
-let sourceId = null;
+let sourceIds = [];
 
 class Extension {
     constructor(uuid) {
@@ -72,11 +72,19 @@ class Extension {
                 SchedProxy.SetForegroundProcessRemote(pid, (result, error) => {
                     if (error) {
                         // On error, notify the user and write to stderr
-                        sourceId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                        idleId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
                             Main.notifyError("Failed to communicate with system76-scheduler service.");
                             logError(error);
+
+                            // Remove idleId from tracking list
+                            const index = array.indexOf(idleId);
+                            if (index > -1) {
+                                array.splice(index, 1);
+                            }
+
                             return false;
                         });
+                        sourceIds.push(idleId);
                     }
                 });
             }
@@ -85,9 +93,9 @@ class Extension {
 
     disable() {
         global.display.disconnect(this._handler);
-        if (sourceId) {
-            GLib.Source.remove(sourceId);
-            sourceId = null;
+        while (sourceIds.length > 0) {
+            let idleId = sourceIds.pop();
+            GLib.Source.remove(idleId);
         }
     }
 }
