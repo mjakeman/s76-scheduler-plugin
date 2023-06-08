@@ -7,10 +7,15 @@ the `GPL-3.0` licence.
 
 ## Installation
 ### Prerequisites
-You must install `system76-scheduler` separately. I maintain a COPR
-for Fedora and derivatives [here](https://copr.fedorainfracloud.org/coprs/mjakeman/system76-scheduler/).
+You must install `system76-scheduler` separately. I recommend [this COPR for Fedora and derivatives](https://copr.fedorainfracloud.org/coprs/kylegospo/system76-scheduler/) maintained by Kyle Gospo.
 
-Ensure that the `com.system76.Scheduler` service is enabled.
+If you previously used the COPR I maintained ([this one](https://copr.fedorainfracloud.org/coprs/mjakeman/system76-scheduler/)), please **uninstall it and change to the one above** as it will no longer receive updates.
+
+Ensure that the `com.system76.Scheduler` service is enabled:
+
+```
+sudo systemctl enable --now com.system76.Scheduler.service
+```
 
 ### Online
 You can find the plugin here: https://extensions.gnome.org/extension/4854/system76-scheduler/
