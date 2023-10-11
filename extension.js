@@ -19,12 +19,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-const GETTEXT_DOMAIN = 's76-scheduler-plugin';
-
-const { GObject, Gio, GLib, St } = imports.gi;
-
-const ExtensionUtils = imports.misc.extensionUtils;
-const Main = imports.ui.main;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 const SchedulerInterface = '<node>\
 <interface name="com.system76.Scheduler"> \
@@ -45,14 +42,12 @@ const SchedProxy = new SchedulerProxy(
 let foreground = 0;
 let sourceIds = [];
 
-class Extension {
+export default class Extension {
     constructor(uuid) {
         this._uuid = uuid;
-
-        ExtensionUtils.initTranslations(GETTEXT_DOMAIN);
     }
 
-    enable() {        
+    enable() {
         log("Initialising system76-scheduler integration");
 
         // Update foreground process whenever the window focus is changed
@@ -64,7 +59,7 @@ class Extension {
 
             // Prioritise process of currently focused window
             const pid = meta_window.get_pid();
-            
+
             if (pid) {
                 if (foreground === pid) return
                 foreground = pid;
